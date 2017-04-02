@@ -1,7 +1,10 @@
-module.exports = Image;
+const Pixel = require('./pixel');
 
 function Image(image) {
     this.image = image;
+    this.getPixel = function(x, y) {
+        return new Pixel(image, x, y);
+    };
     this.energyMap = function() {
         return energyMap(this.image);
     };
@@ -24,3 +27,5 @@ function toImage(image, target) {
 function carve(image, target) {
     return new Image(image);
 }
+
+module.exports = Image;

@@ -1,4 +1,4 @@
-const assert    = require('chai').assert;
+const assert = require('chai').assert;
 const seamCarve = require('../index.js');
 
 describe('seamCarve', function() {
