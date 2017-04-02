@@ -1,0 +1,59 @@
+#+OPTIONS: ':nil *:t -:t ::t <:t H:3 \n:nil ^:t arch:headline
+#+OPTIONS: author:t broken-links:nil c:nil creator:nil
+#+OPTIONS: d:(not "LOGBOOK") date:t e:t email:nil f:t inline:t num:t
+#+OPTIONS: p:nil pri:nil prop:nil stat:t tags:t tasks:t tex:t
+#+OPTIONS: timestamp:t title:t toc:t todo:t |:t
+#+TITLE: CONTRIBUTING
+#+DATE: <2017-04-02 Sun>
+#+AUTHOR: Edward John Steere, Matthew van der Velden
+#+EMAIL: edward.steere@gmail.com; matthew.vdvelden@gmail.com
+#+LANGUAGE: en
+#+SELECT_TAGS: export
+#+EXCLUDE_TAGS: noexport
+#+CREATOR: Emacs 26.0.50 (Org mode 9.0.5)
+#+OPTIONS: html-link-use-abs-url:nil html-postamble:auto
+#+OPTIONS: html-preamble:t html-scripts:t html-style:t
+#+OPTIONS: html5-fancy:nil tex:t
+#+HTML_DOCTYPE: xhtml-strict
+#+HTML_CONTAINER: div
+#+DESCRIPTION:
+#+KEYWORDS:
+#+HTML_LINK_HOME:
+#+HTML_LINK_UP:
+#+HTML_MATHJAX:
+#+HTML_HEAD:
+#+HTML_HEAD_EXTRA:
+#+SUBTITLE:
+#+INFOJS_OPT:
+#+CREATOR: <a href="http://www.gnu.org/software/emacs/">Emacs</a> 26.0.50 (<a href="http://orgmode.org">Org</a> mode 9.0.5)
+#+LATEX_HEADER:
+
+* Introduction
+This document outlines the process for contributing to this
+repository.  We've put these guidelines in place so with two goals in
+mind:
+
+ - Clean commit history
+ - Automated change log generation
+
+* How to Commit
+Rebase off of master before merging/pushing to master so that it's
+always fast forward.
+
+Please observe the following convention when committing in this repo.
+The commit summary should appear on a line of it's own, not ending in
+a full stop, and up to 80 characters.  The summary line should be in
+future tense, such that the summary describes what will happen when
+the commit is applied.  This should be followed by an empty line if
+your change includes any element from the detailed section.  The
+detailed section includes an optional paragraph describing your change
+and then a non optional bullet per file/function combination
+changed/added.  As follows:
+
+#+BEGIN_SRC fundamental
+  Adds an example summary to the repo
+
+  This commit adds a description of how to commit to the repo.  Note
+  that the summary line didn't end in a full stop.
+   - relative/path/to/file.js:someFunction now has flag for speed mode
+#+END_SRC
