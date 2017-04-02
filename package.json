@@ -4,7 +4,7 @@
   "description": "A seam carving library in javascript.",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+      "test": "mocha test/**/*.js"
   },
   "repository": {
     "type": "git",
@@ -15,5 +15,9 @@
   "bugs": {
     "url": "https://github.com/Quiescent/seamstressjs-core/issues"
   },
-  "homepage": "https://github.com/Quiescent/seamstressjs-core#readme"
+  "homepage": "https://github.com/Quiescent/seamstressjs-core#readme",
+  "devDependencies": {
+    "chai": "3.5.0",
+    "mocha": "3.2.0"
+  }
 }

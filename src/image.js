@@ -1,18 +1,26 @@
-module.exports = function Image(image) {
+module.exports = Image;
+
+function Image(image) {
     this.image = image;
-    this.energyMap = energyMap;
-    this.toImage = toImage;
-    this.carve = carve;
+    this.energyMap = function() {
+        return energyMap(this.image);
+    };
+    this.toImage = function(target) {
+        return toImage(this.image, target);
+    };
+    this.carve = function(target) {
+        return carve(this.image, target);
+    };
 };
 
-function energyMap() {
-    return undefined;
+function energyMap(image) {
+    return image;
 }
 
-function toImage(target) {
-    return undefined;
+function toImage(image, target) {
+    return image;
 }
 
-function carve(target) {
-    return undefined;
+function carve(image, target) {
+    return new Image(image);
 }

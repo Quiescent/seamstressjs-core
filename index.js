@@ -1,8 +1,8 @@
-var Image = require('./src/image');
+const Image = require('./src/image');
 
 function seamCarve(image, target) {
-    var indexableImage = new Image(image);
-    var energyMap      = indexableImage.energyMap();
+    const indexableImage = new Image(image);
+    const energyMap      = indexableImage.energyMap();
     return carve(indexableImage, energyMap, target);
 }
 
