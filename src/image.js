@@ -1,18 +1,15 @@
-const Pixel = require('./pixel');
-
-function Image(image) {
-    this.image = image;
-    this.getPixel = function(x, y) {
-        return new Pixel(image, x, y);
-    };
-    this.energyMap = function() {
-        return energyMap(this.image);
-    };
-    this.toImage = function(target) {
-        return toImage(this.image, target);
-    };
-    this.carve = function(target) {
-        return carve(this.image, target);
+function createImage(image) {
+    return {
+        image : image,
+        energyMap : function() {
+            return energyMap(image);
+        },
+        toImage : function(target) {
+            return toImage(image, target);
+        },
+        carve : function(target) {
+            return carve(image, target);
+        }
     };
 };
 
@@ -25,7 +22,7 @@ function toImage(image, target) {
 }
 
 function carve(image, target) {
-    return new Image(image);
+    return createImage(image);
 }
 
-module.exports = Image;
+module.exports = createImage;
