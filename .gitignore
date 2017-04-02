@@ -2,3 +2,6 @@
 *~
 .tern-port
 .tern-project
+
+# Project
+node_modules
