@@ -1,4 +1,5 @@
 {
     "preset": "airbnb",
-    "requireCurlyBraces": null
+    "requireCurlyBraces": null,
+    "requireTrailingComma": null
 }
