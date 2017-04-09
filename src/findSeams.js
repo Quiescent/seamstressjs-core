@@ -22,9 +22,9 @@ function createFinalVector(distanceCache, direction) {
     });
 
   case directionObject.DIAGONAL_FROM_TOP_LEFT:
-    return finalRow[finalRow.length - 1];
+    return [finalRow[finalRow.length - 1]];
   case directionObject.DIAGONAL_FROM_TOP_RIGHT:
-    return finalRow[0];
+    return [finalRow[0]];
   default:
     throw new Error(direction + ' is not a valid direction when createing final vector.  '
                     + 'The following are: ' + JSON.stringify(directionObject));
@@ -43,30 +43,60 @@ function createBackTracker(distanceCache, direction, xDimension, yDimension) {
   switch (direction) {
   case directionObject.DOWN:
     return function (xIndex, yIndex) {
-      return [];
+      const candidates = [];
+      if (yIndex == yDimension - 1) return candidates;
+      if (xIndex != 0) candidates.push(createEnergyCoord(xIndex - 1, yIndex - 1,
+                                                         distanceCache));
+      if (xIndex != xDimension - 1) candidates.push(createEnergyCoord(xIndex + 1,
+                                                                      yIndex - 1,
+                                                                      distanceCache));
+      candidates.push(createEnergyCoord(xIndex, yIndex - 1, distanceCache));
+      return candidates;
     };
 
   case directionObject.ACROSS:
     return function (xIndex, yIndex) {
       const candidates = [];
       if (xIndex == xDimension - 1) return candidates;
-      if (yIndex != 0) candidates.push(createEnergyCoord(xIndex - 1, yIndex - 1,
+      if (yIndex != 0) candidates.push(createEnergyCoord(xIndex + 1, yIndex - 1,
                                                          distanceCache));
-      if (yIndex != yDimension - 1) candidates.push(createEnergyCoord(xIndex - 1,
-                                                                  yIndex + 1,
-                                                                 distanceCache));
-      candidates.push(createEnergyCoord(xIndex - 1, yIndex, distanceCache));
+      if (yIndex != yDimension - 1) candidates.push(createEnergyCoord(xIndex + 1,
+                                                                      yIndex + 1,
+                                                                      distanceCache));
+      candidates.push(createEnergyCoord(xIndex + 1, yIndex, distanceCache));
       return candidates;
     };
 
   case directionObject.DIAGONAL_FROM_TOP_LEFT:
     return function (xIndex, yIndex) {
-      return [];
+      const candidates = [];
+      if (yIndex == 0 && xIndex == 0) return candidates;
+      if (xIndex != 0) candidates.push(createEnergyCoord(xIndex - 1, yIndex,
+                                                         distanceCache));
+      if (yIndex != 0) candidates.push(createEnergyCoord(xIndex,
+                                                         yIndex - 1,
+                                                         distanceCache));
+      if (xIndex != 0 && yIndex != 0) {
+        candidates.push(createEnergyCoord(xIndex - 1, yIndex - 1, distanceCache));
+      }
+
+      return candidates;
     };
 
   case directionObject.DIAGONAL_FROM_TOP_RIGHT:
     return function (xIndex, yIndex) {
-      return [];
+      const candidates = [];
+      if (yIndex == 0 && xIndex == xDimension - 1) return candidates;
+      if (xIndex != xDimension - 1) candidates.push(createEnergyCoord(xIndex + 1, yIndex,
+                                                                      distanceCache));
+      if (yIndex != 0) candidates.push(createEnergyCoord(xIndex,
+                                                         yIndex + 1,
+                                                         distanceCache));
+      if (xIndex != xDimension - 1 && yIndex != 0) {
+        candidates.push(createEnergyCoord(xIndex + 1, yIndex - 1, distanceCache));
+      }
+
+      return candidates;
     };
 
   default:
