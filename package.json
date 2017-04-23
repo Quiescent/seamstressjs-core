@@ -6,7 +6,7 @@
   "scripts": {
     "test": "nyc --reporter=html --reporter=text mocha test/**/*.js && jscs src && jscs test"
   },
-  "engineStrict" : true,
+  "engineStrict": true,
   "engines": {
     "node": ">= 6.10.2",
     "npm": ">= 3.0.0"
@@ -23,7 +23,9 @@
   "homepage": "https://github.com/Quiescent/seamstressjs-core#readme",
   "devDependencies": {
     "chai": "3.5.0",
-    "mocha": "3.2.0"
+    "jscs": "3.0.7",
+    "mocha": "3.2.0",
+    "nyc": "10.2.0"
   },
   "dependencies": {
     "ramda": "0.23.0"
