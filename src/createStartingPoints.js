@@ -34,7 +34,9 @@ function first(x) {
 }
 
 function lessBySecond(thisValue, thatValue) {
-  return thisValue[1] < thatValue[1];
+  return thisValue[1] < thatValue[1] ? -1
+    : thisValue[1] > thatValue[1] ? 1
+    : 0;
 }
 
 module.exports = createStartingPoints;
