@@ -1,34 +1,16 @@
 const createCoord = require('./coord');
 const directionObject = require('./directions');
+const createStartingPoints = require('./createStartingPoints');
 
 function* findSeams(energyMap, direction) {
   const distanceCache = executeAlgorithm(energyMap, direction);
 
-  // list of tuples which are already sorted.
-  const finalVector = createFinalVector(distanceCache, direction);
-  for (var l = 0; l != finalVector.length; ++l) {
-    yield backTrackSeam(distanceCache, l, direction);
+  // list of tuples which are already sorted from best to worst.
+  const startingPoints = createStartingPoints(distanceCache, direction);
+  for (var l = 0; l != startingPoints.length; ++l) {
+    const startingPoint = startingPoints[l];
+    yield backTrackSeam(distanceCache, startingPoint, direction);
   }
-}
-
-function createFinalVector(distanceCache, direction) {
-  const finalRow = distanceCache[distanceCache.length - 1];
-  switch (direction) {
-  case directionObject.DOWN:
-    return finalRow;
-  case directionObject.ACROSS:
-    return distanceCache.map(function (row) {
-      return row[row.length - 1];
-    });
-
-  case directionObject.DIAGONAL_FROM_TOP_LEFT:
-    return [finalRow[finalRow.length - 1]];
-  case directionObject.DIAGONAL_FROM_TOP_RIGHT:
-    return [finalRow[0]];
-  default:
-    throw new Error(direction + ' is not a valid direction when createing final vector.  '
-                    + 'The following are: ' + JSON.stringify(directionObject));
-}
 }
 
 function createEnergyCoord(xIndex, yIndex, distanceCache) {

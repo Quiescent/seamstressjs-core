@@ -7,7 +7,7 @@ describe('finding seams', function () {
   describe('in a singleton energy map', function () {
     const SINGLETON_ENERGY_MAP = [[Infinity]];
     const ZERO_ZERO_SEAM = [createCoord(0, 0)];
-    it('horizantally to a 0x0 image the single pixel is the seam', function () {
+    it('horizantally to a 1x1 image the single pixel is the seam', function () {
       const seams = findSeams(SINGLETON_ENERGY_MAP, directions.ACROSS);
       var seam = seams.next();
       var count = 0;
@@ -20,7 +20,7 @@ describe('finding seams', function () {
       assert.equal(count, 1);
     });
 
-    it('vertically to a 0x0 image the single pixel is the seam', function () {
+    it('vertically to a 1x1 image the single pixel is the seam', function () {
       const seams = findSeams(SINGLETON_ENERGY_MAP, directions.DOWN);
       var seam = seams.next();
       var count = 0;
@@ -33,7 +33,7 @@ describe('finding seams', function () {
       assert.equal(count, 1);
     });
 
-    it('top left diagonally to a 0x0 image the single pixel is the seam', function () {
+    it('top left diagonally to a 1x1 image the single pixel is the seam', function () {
       const seams = findSeams(SINGLETON_ENERGY_MAP, directions.DIAGONAL_FROM_TOP_LEFT);
       var seam = seams.next();
       var count = 0;
@@ -46,7 +46,7 @@ describe('finding seams', function () {
       assert.equal(count, 1);
     });
 
-    it('top right diagonally to a 0x0 image the single pixel is the seam', function () {
+    it('top right diagonally to a 1x1 image the single pixel is the seam', function () {
       const seams = findSeams(SINGLETON_ENERGY_MAP, directions.DIAGONAL_FROM_TOP_RIGHT);
       var seam = seams.next();
       var count = 0;
