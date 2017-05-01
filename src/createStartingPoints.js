@@ -10,19 +10,19 @@ function createStartingPoints(distanceCache, direction) {
 }
 
 function createStartingPointValues(distanceCache, direction) {
-  const finalRow = distanceCache[distanceCache.length - 1];
+  const finalColumn = distanceCache[distanceCache.length - 1];
   switch (direction) {
   case directionObject.DOWN:
-    return finalRow;
-  case directionObject.ACROSS:
-    return distanceCache.map(function (row) {
-      return row[row.length - 1];
+    return distanceCache.map(function (column) {
+      return column[column.length - 1];
     });
 
+  case directionObject.ACROSS:
+    return finalColumn;
   case directionObject.DIAGONAL_FROM_TOP_LEFT:
-    return [finalRow[finalRow.length - 1]];
+    return [finalColumn[finalColumn.length - 1]];
   case directionObject.DIAGONAL_FROM_TOP_RIGHT:
-    return [finalRow[0]];
+    return [distanceCache[0][0]];
   default:
     throw new Error(direction + ' is not a valid direction when createing final vector.  '
                     + 'The following are: ' + JSON.stringify(directionObject));
