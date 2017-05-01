@@ -236,7 +236,6 @@ describe('finding seams', function () {
         ++count;
       }
 
-      var stringified = JSON.stringify(seamsFound);
       const ALL_POSSIBLE_SEAMS = [[createCoord(0, 1), createCoord(0, 0)],
                                   [createCoord(0, 1), createCoord(1, 0)],
                                   [createCoord(1, 1), createCoord(0, 0)],
@@ -299,6 +298,103 @@ describe('finding seams', function () {
       const ALL_POSSIBLE_SEAMS = [[createCoord(0, 1), createCoord(1, 0)],
                                   [createCoord(0, 1), createCoord(1, 1), createCoord(1, 0)],
                                   [createCoord(0, 1), createCoord(0, 0), createCoord(1, 0)]];
+      assert.includeDeepMembers(ALL_POSSIBLE_SEAMS,
+                                seamsFound);
+      assert.equal(count, 1);
+    });
+  });
+
+  describe('in an energy map with maximum coordinate [2, 2]', function () {
+    const RANK_THREE_THREE_ENERGY_MAP = [[Infinity, Infinity, Infinity],
+                                         [Infinity, 10, Infinity],
+                                         [Infinity, Infinity, Infinity]];
+    it('should find three seams from bottom to top', function () {
+      const seams = findSeams(RANK_THREE_THREE_ENERGY_MAP, directions.DOWN);
+      var seamsFound = [];
+      var seam = seams.next();
+      var count = 0;
+      while (!seam.done) {
+        seamsFound.push(seam.value);
+        seam = seams.next();
+        ++count;
+      }
+
+      const ALL_POSSIBLE_SEAMS = [[createCoord(0, 2), createCoord(1, 1), createCoord(0, 0)],
+                                  [createCoord(0, 2), createCoord(1, 1), createCoord(1, 0)],
+                                  [createCoord(0, 2), createCoord(1, 1), createCoord(2, 0)],
+                                  [createCoord(1, 2), createCoord(1, 1), createCoord(0, 0)],
+                                  [createCoord(1, 2), createCoord(1, 1), createCoord(1, 0)],
+                                  [createCoord(1, 2), createCoord(1, 1), createCoord(2, 0)],
+                                  [createCoord(2, 2), createCoord(1, 1), createCoord(0, 0)],
+                                  [createCoord(2, 2), createCoord(1, 1), createCoord(1, 0)],
+                                  [createCoord(2, 2), createCoord(1, 1), createCoord(2, 0)]];
+      assert.includeDeepMembers(ALL_POSSIBLE_SEAMS,
+                                seamsFound);
+      assert.equal(count, 3);
+    });
+
+    it('should find three seams from right to left', function () {
+      const seams = findSeams(RANK_THREE_THREE_ENERGY_MAP, directions.ACROSS);
+      var seamsFound = [];
+      var seam = seams.next();
+      var count = 0;
+      while (!seam.done) {
+        seamsFound.push(seam.value);
+        seam = seams.next();
+        ++count;
+      }
+
+      const ALL_POSSIBLE_SEAMS = [[createCoord(2, 0), createCoord(1, 1), createCoord(0, 0)],
+                                  [createCoord(2, 0), createCoord(1, 1), createCoord(0, 1)],
+                                  [createCoord(2, 0), createCoord(1, 1), createCoord(0, 2)],
+                                  [createCoord(2, 1), createCoord(1, 1), createCoord(0, 0)],
+                                  [createCoord(2, 1), createCoord(1, 1), createCoord(0, 1)],
+                                  [createCoord(2, 1), createCoord(1, 1), createCoord(0, 2)],
+                                  [createCoord(2, 2), createCoord(1, 1), createCoord(0, 0)],
+                                  [createCoord(2, 2), createCoord(1, 1), createCoord(0, 1)],
+                                  [createCoord(2, 2), createCoord(1, 1), createCoord(0, 2)]];
+      assert.includeDeepMembers(ALL_POSSIBLE_SEAMS,
+                                seamsFound);
+      assert.equal(count, 3);
+    });
+
+    it('should find three seams diagonally from the bottom right', function () {
+      const seams = findSeams(RANK_THREE_THREE_ENERGY_MAP, directions.DIAGONAL_FROM_TOP_LEFT);
+      var seamsFound = [];
+      var seam = seams.next();
+      var count = 0;
+      while (!seam.done) {
+        seamsFound.push(seam.value);
+        seam = seams.next();
+        ++count;
+      }
+
+      const stringified = JSON.stringify(seamsFound);
+      const ALL_POSSIBLE_SEAMS =
+            [[createCoord(2, 2), createCoord(1, 1), createCoord(0, 0)],
+             [createCoord(2, 2), createCoord(1, 1), createCoord(1, 0), createCoord(0, 0)],
+             [createCoord(2, 2), createCoord(1, 1), createCoord(0, 1), createCoord(0, 0)]];
+      assert.includeDeepMembers(ALL_POSSIBLE_SEAMS,
+                                seamsFound);
+      assert.equal(count, 1);
+    });
+
+    it('should find three seams diagonally from the top right', function () {
+      const seams = findSeams(RANK_THREE_THREE_ENERGY_MAP, directions.DIAGONAL_FROM_TOP_RIGHT);
+      var seamsFound = [];
+      var seam = seams.next();
+      var count = 0;
+      while (!seam.done) {
+        seamsFound.push(seam.value);
+        seam = seams.next();
+        ++count;
+      }
+
+      const stringified = JSON.stringify(seamsFound);
+      const ALL_POSSIBLE_SEAMS =
+            [[createCoord(0, 2), createCoord(1, 1), createCoord(2, 0)],
+             [createCoord(0, 2), createCoord(1, 1), createCoord(1, 0), createCoord(2, 0)],
+             [createCoord(0, 2), createCoord(1, 1), createCoord(2, 1), createCoord(2, 0)]];
       assert.includeDeepMembers(ALL_POSSIBLE_SEAMS,
                                 seamsFound);
       assert.equal(count, 1);

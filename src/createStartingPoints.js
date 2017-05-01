@@ -1,11 +1,12 @@
 const directionObject = require('./directions');
+const lessBy = require('./lessBy');
 const ramda = require('ramda');
 
 function createStartingPoints(distanceCache, direction) {
   const values = createStartingPointValues(distanceCache, direction);
   const range = ramda.range(0, values.length);
   const valuesWithIndicies = ramda.zip(range, values);
-  const sortedValuesWithIndices = ramda.sort(lessBySecond, valuesWithIndicies);
+  const sortedValuesWithIndices = ramda.sort(lessBy(1), valuesWithIndicies);
   return ramda.map(first, sortedValuesWithIndices);
 }
 
@@ -31,12 +32,6 @@ function createStartingPointValues(distanceCache, direction) {
 
 function first(x) {
   return x[0];
-}
-
-function lessBySecond(thisValue, thatValue) {
-  return thisValue[1] < thatValue[1] ? -1
-    : thisValue[1] > thatValue[1] ? 1
-    : 0;
 }
 
 module.exports = createStartingPoints;

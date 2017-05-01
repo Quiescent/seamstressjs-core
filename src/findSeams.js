@@ -1,6 +1,8 @@
 const createCoord = require('./coord');
 const directionObject = require('./directions');
 const createStartingPoints = require('./createStartingPoints');
+const lessBy = require('./lessBy');
+const ramda = require('ramda');
 
 function* findSeams(energyMap, direction) {
   if (energyMap.length === 0) {
@@ -26,18 +28,18 @@ function createEnergyCoord(xIndex, yIndex, distanceCache) {
 
 }
 
-function createBackTracker(distanceCache, direction, xDimension, yDimension) {
+function createBackTracker(map, direction, xDimension, yDimension) {
   switch (direction) {
   case directionObject.DOWN:
     return function (xIndex, yIndex) {
       const candidates = [];
       if (yIndex == 0) return candidates;
       if (xIndex != 0) candidates.push(createEnergyCoord(xIndex - 1, yIndex - 1,
-                                                         distanceCache));
+                                                         map));
       if (xIndex != xDimension - 1) candidates.push(createEnergyCoord(xIndex + 1,
                                                                       yIndex - 1,
-                                                                      distanceCache));
-      candidates.push(createEnergyCoord(xIndex, yIndex - 1, distanceCache));
+                                                                      map));
+      candidates.push(createEnergyCoord(xIndex, yIndex - 1, map));
       return candidates;
     };
 
@@ -46,11 +48,11 @@ function createBackTracker(distanceCache, direction, xDimension, yDimension) {
       const candidates = [];
       if (xIndex == 0) return candidates;
       if (yIndex != 0) candidates.push(createEnergyCoord(xIndex - 1, yIndex - 1,
-                                                         distanceCache));
+                                                         map));
       if (yIndex != yDimension - 1) candidates.push(createEnergyCoord(xIndex - 1,
                                                                       yIndex + 1,
-                                                                      distanceCache));
-      candidates.push(createEnergyCoord(xIndex - 1, yIndex, distanceCache));
+                                                                      map));
+      candidates.push(createEnergyCoord(xIndex - 1, yIndex, map));
       return candidates;
     };
 
@@ -59,12 +61,12 @@ function createBackTracker(distanceCache, direction, xDimension, yDimension) {
       const candidates = [];
       if (yIndex == 0 && xIndex == 0) return candidates;
       if (xIndex != 0) candidates.push(createEnergyCoord(xIndex - 1, yIndex,
-                                                         distanceCache));
+                                                         map));
       if (yIndex != 0) candidates.push(createEnergyCoord(xIndex,
                                                          yIndex - 1,
-                                                         distanceCache));
+                                                         map));
       if (xIndex != 0 && yIndex != 0) {
-        candidates.push(createEnergyCoord(xIndex - 1, yIndex - 1, distanceCache));
+        candidates.push(createEnergyCoord(xIndex - 1, yIndex - 1, map));
       }
 
       return candidates;
@@ -76,12 +78,12 @@ function createBackTracker(distanceCache, direction, xDimension, yDimension) {
       const candidates = [];
       if (yIndex == 0 && xIndex == maxXCoord) return candidates;
       if (xIndex != maxXCoord) candidates.push(createEnergyCoord(xIndex + 1, yIndex,
-                                                                 distanceCache));
+                                                                 map));
       if (yIndex != 0) candidates.push(createEnergyCoord(xIndex,
                                                          yIndex - 1,
-                                                         distanceCache));
+                                                         map));
       if (xIndex != maxXCoord && yIndex != 0) {
-        candidates.push(createEnergyCoord(xIndex + 1, yIndex - 1, distanceCache));
+        candidates.push(createEnergyCoord(xIndex + 1, yIndex - 1, map));
       }
 
       return candidates;
@@ -124,10 +126,7 @@ function backTrackSeam(distanceCache, startOffset, direction) {
   var currentCoord = startCoord(distanceCache, startOffset, direction);
   while (currentCoord != null) {
     seam.push(currentCoord);
-    const candidates = backTracker(currentCoord.x, currentCoord.y);
-    candidates.sort(function (thisEnergyCoord, thatEnergyCoord) {
-      return thisEnergyCoord.energy < thatEnergyCoord.energy;
-    });
+    const candidates = ramda.sort(lessBy('energy'), backTracker(currentCoord.x, currentCoord.y));
 
     currentCoord = candidates.length === 0 ? null : candidates[0].coord;
   }
@@ -150,7 +149,7 @@ function executeAlgorithm(energyMap, direction) {
   const xDimension = energyMap.length;
   const yDimension = energyMap[0].length;
   const distanceCache = createEmptyDistanceCache(xDimension, yDimension);
-  const findCandidates = decodeCandidateFunction(energyMap, direction);
+  const findCandidates = createBackTracker(energyMap, direction, xDimension, yDimension);
   const nextCoord = decodeCoordFunction(energyMap, direction,
                                         xDimension, yDimension);
 
@@ -159,7 +158,7 @@ function executeAlgorithm(energyMap, direction) {
   var currentCoord = createCoord(0, 0);
   while (currentCoord != null) {
     const candidates = findCandidates(currentCoord.x, currentCoord.y);
-    const thisEnergy = computeThisEnergy(energyMap, currentCoord, candidates);
+    const thisEnergy = computeCumulativeEnergy(energyMap, currentCoord, candidates);
     append(distanceCache, currentCoord, thisEnergy);
     currentCoord = nextCoord(currentCoord.x, currentCoord.y);
   }
@@ -167,14 +166,20 @@ function executeAlgorithm(energyMap, direction) {
   return distanceCache;
 }
 
-// TODO: implement!
-function decodeCandidateFunction(energyMap, direction) {
-  return function (xIndex, yIndex) {
-    const candidateOne = Infinity;
-    const candidateTwo = Infinity;
-    const candidateThree = Infinity;
-    return [candidateOne, candidateTwo, candidateThree];
-  };
+const INFINITE_ENERGY_DUMMY = {
+  energy: Infinity
+};
+function infinityIfUndifined(energyCoordinate) {
+  return energyCoordinate == undefined ? INFINITE_ENERGY_DUMMY : energyCoordinate;
+}
+
+function computeCumulativeEnergy(energyMap, coord, candidates) {
+  const leastCandidate = ramda.compose(infinityIfUndifined, ramda.head,
+                                       ramda.sort(lessBy('energy')))(candidates);
+  const leastEnergy = leastCandidate.energy;
+  const shouldAdd = isFinite(leastEnergy);
+  const toAdd =  shouldAdd ? leastEnergy : 0;
+  return energyMap[coord.x][coord.y] + toAdd;
 }
 
 function decodeCoordFunction(energyMap, direction, xDimension, yDimension) {
@@ -201,10 +206,6 @@ function decodeCoordFunction(energyMap, direction, xDimension, yDimension) {
                       + 'The following are: ' + JSON.stringify(directionObject));
   }
   };
-}
-
-function computeThisEnergy(energyMap, coord, candidates) {
-  return Infinity;
 }
 
 function append(distanceCache, coord, energy) {
