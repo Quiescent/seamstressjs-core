@@ -126,7 +126,7 @@ function backTrackSeam(distanceCache, startOffset, direction) {
     seam.push(currentCoord);
     const candidates = backTracker(currentCoord.x, currentCoord.y);
     candidates.sort(function (thisEnergyCoord, thatEnergyCoord) {
-      return thisEnergyCoord.energy.compare(thatEnergyCoord.energy);
+      return thisEnergyCoord.energy < thatEnergyCoord.energy;
     });
 
     currentCoord = candidates.length === 0 ? null : candidates[0].coord;

@@ -223,4 +223,86 @@ describe('finding seams', function () {
 
   });
 
+  describe('in an energy map with maximum coordinate [1, 1]', function () {
+    const RANK_TWO_TWO_ENERGY_MAP = [[Infinity, Infinity], [Infinity, Infinity]];
+    it('should find four seams from bottom to top', function () {
+      const seams = findSeams(RANK_TWO_TWO_ENERGY_MAP, directions.DOWN);
+      var seamsFound = [];
+      var seam = seams.next();
+      var count = 0;
+      while (!seam.done) {
+        seamsFound.push(seam.value);
+        seam = seams.next();
+        ++count;
+      }
+
+      var stringified = JSON.stringify(seamsFound);
+      const ALL_POSSIBLE_SEAMS = [[createCoord(0, 1), createCoord(0, 0)],
+                                  [createCoord(0, 1), createCoord(1, 0)],
+                                  [createCoord(1, 1), createCoord(0, 0)],
+                                  [createCoord(1, 1), createCoord(1, 0)]];;
+      assert.includeDeepMembers(ALL_POSSIBLE_SEAMS,
+                                seamsFound);
+      assert.equal(count, 2);
+    });
+
+    it('should find four seams from right to left', function () {
+      const seams = findSeams(RANK_TWO_TWO_ENERGY_MAP, directions.ACROSS);
+      var seamsFound = [];
+      var seam = seams.next();
+      var count = 0;
+      while (!seam.done) {
+        seamsFound.push(seam.value);
+        seam = seams.next();
+        ++count;
+      }
+
+      const ALL_POSSIBLE_SEAMS = [[createCoord(1, 0), createCoord(0, 0)],
+                                  [createCoord(1, 0), createCoord(0, 1)],
+                                  [createCoord(1, 1), createCoord(0, 0)],
+                                  [createCoord(1, 1), createCoord(0, 1)]];
+      assert.includeDeepMembers(ALL_POSSIBLE_SEAMS,
+                                seamsFound);
+      assert.equal(count, 2);
+    });
+
+    it('should find one seam from bottom right to top left', function () {
+      const seams = findSeams(RANK_TWO_TWO_ENERGY_MAP, directions.DIAGONAL_FROM_TOP_LEFT);
+      var seamsFound = [];
+      var seam = seams.next();
+      var count = 0;
+      while (!seam.done) {
+        seamsFound.push(seam.value);
+        seam = seams.next();
+        ++count;
+      }
+
+      const ALL_POSSIBLE_SEAMS = [[createCoord(1, 1), createCoord(0, 0)],
+                                  [createCoord(1, 1), createCoord(1, 0), createCoord(0, 0)],
+                                  [createCoord(1, 1), createCoord(0, 1), createCoord(0, 0)]];
+      assert.includeDeepMembers(ALL_POSSIBLE_SEAMS,
+                                seamsFound);
+      assert.equal(count, 1);
+    });
+
+    it('should find one seam from bottom left to top right', function () {
+      const seams = findSeams(RANK_TWO_TWO_ENERGY_MAP, directions.DIAGONAL_FROM_TOP_RIGHT);
+      var seamsFound = [];
+      var seam = seams.next();
+      var count = 0;
+      while (!seam.done) {
+        seamsFound.push(seam.value);
+        seam = seams.next();
+        ++count;
+      }
+
+      const ALL_POSSIBLE_SEAMS = [[createCoord(0, 1), createCoord(1, 0)],
+                                  [createCoord(0, 1), createCoord(1, 1), createCoord(1, 0)],
+                                  [createCoord(0, 1), createCoord(0, 0), createCoord(1, 0)]];
+      assert.includeDeepMembers(ALL_POSSIBLE_SEAMS,
+                                seamsFound);
+      assert.equal(count, 1);
+    });
+  });
+
 });
