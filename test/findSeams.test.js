@@ -369,7 +369,6 @@ describe('finding seams', function () {
         ++count;
       }
 
-      const stringified = JSON.stringify(seamsFound);
       const ALL_POSSIBLE_SEAMS =
             [[createCoord(2, 2), createCoord(1, 1), createCoord(0, 0)],
              [createCoord(2, 2), createCoord(1, 1), createCoord(1, 0), createCoord(0, 0)],
@@ -390,11 +389,126 @@ describe('finding seams', function () {
         ++count;
       }
 
-      const stringified = JSON.stringify(seamsFound);
       const ALL_POSSIBLE_SEAMS =
             [[createCoord(0, 2), createCoord(1, 1), createCoord(2, 0)],
              [createCoord(0, 2), createCoord(1, 1), createCoord(1, 0), createCoord(2, 0)],
              [createCoord(0, 2), createCoord(1, 1), createCoord(2, 1), createCoord(2, 0)]];
+      assert.includeDeepMembers(ALL_POSSIBLE_SEAMS,
+                                seamsFound);
+      assert.equal(count, 1);
+    });
+  });
+
+  describe('in an energy map with maximum coordinate [2, 3]', function () {
+    const RANK_TWO_THREE_ENERGY_MAP = [[Infinity, Infinity, Infinity, Infinity],
+                                       [Infinity, 5, 3, Infinity],
+                                       [Infinity, Infinity, Infinity, Infinity]];
+    it('should find a seam through three when going across', function () {
+      const seams = findSeams(RANK_TWO_THREE_ENERGY_MAP, directions.ACROSS);
+      var seamsFound = [];
+      var seam = seams.next();
+      var count = 0;
+      while (!seam.done) {
+        seamsFound.push(seam.value);
+        seam = seams.next();
+        ++count;
+      }
+
+      // Broken per starting block on the right of the map
+      const ALL_POSSIBLE_SEAMS = [[createCoord(2, 0), createCoord(1, 1), createCoord(0, 0)],
+                                  [createCoord(2, 0), createCoord(1, 1), createCoord(0, 1)],
+                                  [createCoord(2, 0), createCoord(1, 1), createCoord(0, 2)],
+
+                                  [createCoord(2, 1), createCoord(1, 2), createCoord(0, 1)],
+                                  [createCoord(2, 1), createCoord(1, 2), createCoord(0, 2)],
+                                  [createCoord(2, 1), createCoord(1, 2), createCoord(0, 3)],
+
+                                  [createCoord(2, 2), createCoord(1, 2), createCoord(0, 1)],
+                                  [createCoord(2, 2), createCoord(1, 2), createCoord(0, 2)],
+                                  [createCoord(2, 2), createCoord(1, 2), createCoord(0, 3)],
+
+                                  [createCoord(2, 3), createCoord(1, 2), createCoord(0, 1)],
+                                  [createCoord(2, 3), createCoord(1, 2), createCoord(0, 2)],
+                                  [createCoord(2, 3), createCoord(1, 2), createCoord(0, 3)]];
+      assert.includeDeepMembers(ALL_POSSIBLE_SEAMS,
+                                seamsFound);
+      assert.equal(count, 4);
+    });
+
+    it('should find a seam through four when going across', function () {
+      const seams = findSeams(RANK_TWO_THREE_ENERGY_MAP, directions.DOWN);
+      var seamsFound = [];
+      var seam = seams.next();
+      var count = 0;
+      while (!seam.done) {
+        seamsFound.push(seam.value);
+        seam = seams.next();
+        ++count;
+      }
+
+      // Broken per starting block on the right of the map
+      const ALL_POSSIBLE_SEAMS = [
+        [createCoord(0, 3), createCoord(1, 2), createCoord(1, 1), createCoord(0, 0)],
+        [createCoord(1, 3), createCoord(1, 2), createCoord(1, 1), createCoord(0, 0)],
+        [createCoord(2, 3), createCoord(1, 2), createCoord(1, 1), createCoord(0, 0)],
+
+        [createCoord(0, 3), createCoord(1, 2), createCoord(1, 1), createCoord(1, 0)],
+        [createCoord(1, 3), createCoord(1, 2), createCoord(1, 1), createCoord(1, 0)],
+        [createCoord(2, 3), createCoord(1, 2), createCoord(1, 1), createCoord(1, 0)],
+
+        [createCoord(0, 3), createCoord(1, 2), createCoord(1, 1), createCoord(2, 0)],
+        [createCoord(1, 3), createCoord(1, 2), createCoord(1, 1), createCoord(2, 0)],
+        [createCoord(2, 3), createCoord(1, 2), createCoord(1, 1), createCoord(2, 0)]];
+      assert.includeDeepMembers(ALL_POSSIBLE_SEAMS,
+                                seamsFound);
+      assert.equal(count, 3);
+    });
+
+    it('should find a single seam when going diagonally from top left', function () {
+      const seams = findSeams(RANK_TWO_THREE_ENERGY_MAP, directions.DIAGONAL_FROM_TOP_LEFT);
+      var seamsFound = [];
+      var seam = seams.next();
+      var count = 0;
+      while (!seam.done) {
+        seamsFound.push(seam.value);
+        seam = seams.next();
+        ++count;
+      }
+
+      // Broken per starting block on the right of the map
+      const ALL_POSSIBLE_SEAMS = [
+        [createCoord(2, 3), createCoord(1, 2), createCoord(1, 1), createCoord(0, 0)],
+
+        [createCoord(2, 3), createCoord(1, 2), createCoord(1, 1),
+         createCoord(0, 1), createCoord(0, 0)],
+
+        [createCoord(2, 3), createCoord(1, 2), createCoord(1, 1),
+         createCoord(1, 0), createCoord(0, 0)]];
+      assert.includeDeepMembers(ALL_POSSIBLE_SEAMS,
+                                seamsFound);
+      assert.equal(count, 1);
+    });
+
+    it('should find a single seam when going diagonally from top right', function () {
+      const seams = findSeams(RANK_TWO_THREE_ENERGY_MAP, directions.DIAGONAL_FROM_TOP_RIGHT);
+      var seamsFound = [];
+      var seam = seams.next();
+      var count = 0;
+      while (!seam.done) {
+        seamsFound.push(seam.value);
+        seam = seams.next();
+        ++count;
+      }
+
+      // Broken per starting block on the right of the map
+      const ALL_POSSIBLE_SEAMS = [
+        [createCoord(0, 3), createCoord(1, 2), createCoord(1, 1), createCoord(2, 0)],
+
+        [createCoord(0, 3), createCoord(1, 2), createCoord(1, 1),
+         createCoord(1, 0), createCoord(2, 0)],
+
+        [createCoord(0, 3), createCoord(1, 2), createCoord(1, 1),
+         createCoord(2, 1), createCoord(2, 0)]];
       assert.includeDeepMembers(ALL_POSSIBLE_SEAMS,
                                 seamsFound);
       assert.equal(count, 1);
