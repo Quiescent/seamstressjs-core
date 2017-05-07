@@ -13,3 +13,6 @@ dist
 # Code coverage
 coverage
 .nyc_output
+
+# OS files and directories
+.DS_Store
