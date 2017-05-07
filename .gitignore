@@ -7,6 +7,9 @@ TAGS
 # Project
 node_modules
 
+# Release
+dist
+
 # Code coverage
 coverage
 .nyc_output
