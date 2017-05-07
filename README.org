@@ -52,23 +52,18 @@ project is that we don't think that:
 For convenience, here is a cross: ✗, and here is a tick: ✓
 
 *** Properties
-#+BEGIN_EXPORT html
-<dl>
-  <dt>Average Image Energy</dt>
-  <dd>When removing a low energy seam, the average energy of the image
-  should increase.  Conversely, when growing the image from a low
-  energy seam, the average energy of the image should decrease.</dd>
+**** /Average Image Energy/
+When removing a low energy seam, the average energy of the image
+should increase.  Conversely, when growing the image from a low energy
+seam, the average energy of the image should decrease.
 
-  <dt>Total Image Energy</dt>
-  <dd>When removing a seam from the image the total energy should
-  decrease and when adding a seam the total energy should
-  increase.</dd>
+**** /Total Image Energy/
+When removing a seam from the image the total energy should decrease
+and when adding a seam the total energy should increase.
 
-  <dt>Image Dimension Consistency</dt>
-  <dd>The number of pixels in each row should be the same as in every
-  other row and the same applies to the columns in the image</dd>
-</dl>
-#+END_EXPORT
+**** /Image Dimension Consistency/
+The number of pixels in each row should be the same as in every
+other row and the same applies to the columns in the image.
 
 *** Generators
 For each generator we define a percentile for high coverage and day to
@@ -92,15 +87,11 @@ involved:
   generator :: (Fractional a, RandomGen b) => a -> b -> RandomEnergyMap
 #+END_SRC
 
-#+BEGIN_EXPORT html
-<dl>
-  <dt>White Noise</dt>
-  <dd>We literally don't know what the possible cases are and white
-  noise tends to work well when modelling randomness in nature.  High
-  coverage is set to 95th percentile and day to day fast checking is
-  set to 68th percentile.</dd>
-</dl>
-#+END_EXPORT
+**** /White Noise/
+We literally don't know what the possible cases are and white noise
+tends to work well when modelling randomness in nature.  High coverage
+is set to 95th percentile and day to day fast checking is set to 68th
+percentile.
 
 *** Running
 The objective of the test running harness is to remember all known
