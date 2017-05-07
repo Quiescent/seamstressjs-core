@@ -399,6 +399,10 @@ describe('finding seams', function () {
     });
   });
 
+  // The rank 4, 4 test choice made in every direction.  This test
+  // might seem (sorry for the pun) to be useless then, but it does
+  // test the simplest possible scenario where there is a test of any
+  // kind.
   describe('in an energy map with maximum coordinate [2, 3]', function () {
     const RANK_TWO_THREE_ENERGY_MAP = [[Infinity, Infinity, Infinity, Infinity],
                                        [Infinity, 5, 3, Infinity],
@@ -435,7 +439,7 @@ describe('finding seams', function () {
       assert.equal(count, 4);
     });
 
-    it('should find a seam through four when going across', function () {
+    it('should find a seam through four when going down', function () {
       const seams = findSeams(RANK_TWO_THREE_ENERGY_MAP, directions.DOWN);
       var seamsFound = [];
       var seam = seams.next();
@@ -446,7 +450,7 @@ describe('finding seams', function () {
         ++count;
       }
 
-      // Broken per starting block on the right of the map
+      // Broken per three variations of the three seams
       const ALL_POSSIBLE_SEAMS = [
         [createCoord(0, 3), createCoord(1, 2), createCoord(1, 1), createCoord(0, 0)],
         [createCoord(1, 3), createCoord(1, 2), createCoord(1, 1), createCoord(0, 0)],
@@ -475,7 +479,6 @@ describe('finding seams', function () {
         ++count;
       }
 
-      // Broken per starting block on the right of the map
       const ALL_POSSIBLE_SEAMS = [
         [createCoord(2, 3), createCoord(1, 2), createCoord(1, 1), createCoord(0, 0)],
 
@@ -500,7 +503,6 @@ describe('finding seams', function () {
         ++count;
       }
 
-      // Broken per starting block on the right of the map
       const ALL_POSSIBLE_SEAMS = [
         [createCoord(0, 3), createCoord(1, 2), createCoord(1, 1), createCoord(2, 0)],
 
@@ -515,4 +517,155 @@ describe('finding seams', function () {
     });
   });
 
+  describe('in an energy map with maximum coordinate [3, 3]', function () {
+    const RANK_THREE_THREE_ENERGY_MAP = [[Infinity, Infinity, Infinity, Infinity],
+                                         [Infinity, 3, 5, Infinity],
+                                         [Infinity, 5, 3, Infinity],
+                                         [Infinity, Infinity, Infinity, Infinity]];
+    it('should find a seam through four when going across', function () {
+      const seams = findSeams(RANK_THREE_THREE_ENERGY_MAP, directions.ACROSS);
+      var seamsFound = [];
+      var seam = seams.next();
+      var count = 0;
+      while (!seam.done) {
+        seamsFound.push(seam.value);
+        seam = seams.next();
+        ++count;
+      }
+
+      // Broken per starting block on the right of the map
+      const ALL_POSSIBLE_SEAMS = [
+        [createCoord(3, 0), createCoord(2, 1), createCoord(1, 1), createCoord(0, 0)],
+        [createCoord(3, 0), createCoord(2, 1), createCoord(1, 1), createCoord(0, 1)],
+        [createCoord(3, 0), createCoord(2, 1), createCoord(1, 1), createCoord(0, 2)],
+
+        [createCoord(3, 1), createCoord(2, 2), createCoord(1, 1), createCoord(0, 0)],
+        [createCoord(3, 1), createCoord(2, 2), createCoord(1, 1), createCoord(0, 1)],
+        [createCoord(3, 1), createCoord(2, 2), createCoord(1, 1), createCoord(0, 2)],
+
+        [createCoord(3, 2), createCoord(2, 2), createCoord(1, 1), createCoord(0, 0)],
+        [createCoord(3, 2), createCoord(2, 2), createCoord(1, 1), createCoord(0, 1)],
+        [createCoord(3, 2), createCoord(2, 2), createCoord(1, 1), createCoord(0, 2)],
+
+        [createCoord(3, 3), createCoord(2, 2), createCoord(1, 1), createCoord(0, 0)],
+        [createCoord(3, 3), createCoord(2, 2), createCoord(1, 1), createCoord(0, 1)],
+        [createCoord(3, 3), createCoord(2, 2), createCoord(1, 1), createCoord(0, 2)]];
+      assert.includeDeepMembers(ALL_POSSIBLE_SEAMS,
+                                seamsFound);
+      assert.equal(count, 4);
+    });
+
+    it('should find a seam through four when going down', function () {
+      const seams = findSeams(RANK_THREE_THREE_ENERGY_MAP, directions.DOWN);
+      var seamsFound = [];
+      var seam = seams.next();
+      var count = 0;
+      while (!seam.done) {
+        seamsFound.push(seam.value);
+        seam = seams.next();
+        ++count;
+      }
+
+      // Broken per four variations of the three seams
+      const ALL_POSSIBLE_SEAMS = [
+        [createCoord(0, 3), createCoord(1, 2), createCoord(1, 1), createCoord(0, 0)],
+        [createCoord(1, 3), createCoord(2, 2), createCoord(1, 1), createCoord(0, 0)],
+        [createCoord(2, 3), createCoord(2, 2), createCoord(1, 1), createCoord(0, 0)],
+        [createCoord(3, 3), createCoord(2, 2), createCoord(1, 1), createCoord(0, 0)],
+
+        [createCoord(0, 3), createCoord(1, 2), createCoord(1, 1), createCoord(1, 0)],
+        [createCoord(1, 3), createCoord(2, 2), createCoord(1, 1), createCoord(1, 0)],
+        [createCoord(2, 3), createCoord(2, 2), createCoord(1, 1), createCoord(1, 0)],
+        [createCoord(3, 3), createCoord(2, 2), createCoord(1, 1), createCoord(1, 0)],
+
+        [createCoord(0, 3), createCoord(1, 2), createCoord(1, 1), createCoord(2, 0)],
+        [createCoord(1, 3), createCoord(2, 2), createCoord(1, 1), createCoord(2, 0)],
+        [createCoord(2, 3), createCoord(2, 2), createCoord(1, 1), createCoord(2, 0)],
+        [createCoord(3, 3), createCoord(2, 2), createCoord(1, 1), createCoord(2, 0)]];
+      assert.includeDeepMembers(ALL_POSSIBLE_SEAMS,
+                                seamsFound);
+      assert.equal(count, 4);
+    });
+
+    it('should find a single seam when going diagonally from top left', function () {
+      const seams = findSeams(RANK_THREE_THREE_ENERGY_MAP, directions.DIAGONAL_FROM_TOP_LEFT);
+      var seamsFound = [];
+      var seam = seams.next();
+      var count = 0;
+      while (!seam.done) {
+        seamsFound.push(seam.value);
+        seam = seams.next();
+        ++count;
+      }
+
+      const ALL_POSSIBLE_SEAMS = [
+        [createCoord(3, 3), createCoord(2, 2), createCoord(1, 1), createCoord(0, 0)],
+
+        [createCoord(3, 3), createCoord(2, 2), createCoord(1, 1), createCoord(1, 0),
+         createCoord(0, 0)],
+
+        [createCoord(3, 3), createCoord(2, 2), createCoord(1, 1), createCoord(0, 1),
+         createCoord(0, 0)]];
+      assert.includeDeepMembers(ALL_POSSIBLE_SEAMS,
+                                seamsFound);
+      assert.equal(count, 1);
+    });
+
+    it('should find a single seam when going diagonally from top right', function () {
+      const seams = findSeams(RANK_THREE_THREE_ENERGY_MAP, directions.DIAGONAL_FROM_TOP_RIGHT);
+      var seamsFound = [];
+      var seam = seams.next();
+      var count = 0;
+      while (!seam.done) {
+        seamsFound.push(seam.value);
+        seam = seams.next();
+        ++count;
+      }
+
+      const ALL_POSSIBLE_SEAMS = [
+        [createCoord(0, 3), createCoord(1, 2), createCoord(2, 1), createCoord(3, 0)],
+
+        [createCoord(0, 3), createCoord(1, 2), createCoord(2, 1), createCoord(3, 1),
+         createCoord(3, 0)],
+
+        [createCoord(0, 3), createCoord(1, 2), createCoord(2, 1), createCoord(2, 0),
+         createCoord(3, 0)]];
+      const stringified = JSON.stringify(seamsFound);
+      assert.includeDeepMembers(ALL_POSSIBLE_SEAMS,
+                                seamsFound);
+      assert.equal(count, 1);
+    });
+  });
+
+  describe('in an energy map with maximum coordinate of [4, 4]', function () {
+    describe('where that map has an optimal path for diagonal from top left', function () {
+      const RANK_FOUR_FOUR_ENERGY_MAP = [[Infinity, Infinity, Infinity, Infinity, Infinity],
+                                         [Infinity, 0, 0, 5, Infinity],
+                                         [Infinity, 0, 5, 5, Infinity],
+                                         [Infinity, 5, 5, 5, Infinity],
+                                         [Infinity, Infinity, Infinity, Infinity, Infinity]];
+
+      /*
+       * This map illustrates how the diagonal carver should find the
+       * path which has the greatest long term benefit.  This is not
+       * currently implemented because it's much much harder than we
+       * first realised because you have to carve as much up and down as
+       * you do side to side, this is required in order to maintain the
+       * integrity of the image dimensions for each row and column.
+       * This requires a potentially novel algorithm.
+       */
+    });
+
+    describe('where that map has an optimal path for diagonal from top right', function () {
+      const RANK_FOUR_FOUR_ENERGY_MAP = [[Infinity, Infinity, Infinity, Infinity, Infinity],
+                                         [Infinity, 5, 0, 0, Infinity],
+                                         [Infinity, 5, 5, 0, Infinity],
+                                         [Infinity, 5, 5, 5, Infinity],
+                                         [Infinity, Infinity, Infinity, Infinity, Infinity]];
+
+      /*
+       * See the comment for the diagonal from the top left.
+       */
+    });
+  });
 });
