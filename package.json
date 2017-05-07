@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "nyc --reporter=html --reporter=text mocha test/**/*.js && jscs src && jscs test",
-    "build": "webpack --config webpack.config.js"
+    "build": "webpack --config webpack.config.js",
+    "next-update": "next-update -k true --tldr"
   },
   "engineStrict": true,
   "engines": {
@@ -27,6 +28,7 @@
     "jscs": "3.0.7",
     "mocha": "3.2.0",
     "nyc": "10.2.0",
+    "next-update": "1.5.1", 
     "webpack": "2.5.1"
   },
   "dependencies": {
