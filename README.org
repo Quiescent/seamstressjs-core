@@ -29,4 +29,117 @@
 #+LATEX_HEADER:
 
 * Introduction 
-This is introduction!
+Seamstress JS is a library that determines optimal seams of pixels and
+removes them from or adds them to an image such that one may resize an
+image while retaining the most important content.
+
+* Tests
+This repository contains a very comprehensive suite of tests.
+
+** Property Based Tests
+The reason that we have a focus on property based testing in this
+project is that we don't think that:
+ - it's not feasible to maintain unit tests for very large images
+   (more than rank 4, 4) because of the number of variations;
+ - property based tests can pick up unforseen scenarios;
+
+| Properties\Generators       | White Noise |
+|-----------------------------+-------------|
+| Average Image Energy        | ✗           |
+| Total Image Energy          | ✗           |
+| Image Dimension Consistency | ✗           |
+
+For convenience, here is a cross: ✗, and here is a tick: ✓
+
+*** Properties
+#+BEGIN_EXPORT html
+<dl>
+  <dt>Average Image Energy</dt>
+  <dd>When removing a low energy seam, the average energy of the image
+  should increase.  Conversely, when growing the image from a low
+  energy seam, the average energy of the image should decrease.</dd>
+
+  <dt>Total Image Energy</dt>
+  <dd>When removing a seam from the image the total energy should
+  decrease and when adding a seam the total energy should
+  increase.</dd>
+
+  <dt>Image Dimension Consistency</dt>
+  <dd>The number of pixels in each row should be the same as in every
+  other row and the same applies to the columns in the image</dd>
+</dl>
+#+END_EXPORT
+
+*** Generators
+For each generator we define a percentile for high coverage and day to
+day fast checking.  This varies between generators due to the varying
+complexity of each generator.
+
+The convention for the type of a generator is a function from a seed
+type and a fractional number (the percentile coverage) to a structure
+of a next seed and an EnergyMap.
+
+We believe that Haskell is an excellent way of describing the types
+involved:
+#+BEGIN_SRC haskell
+  type EnergyMap = [[Float]]
+
+  type RandomSeed = Integer
+
+  type RandomEnergyMap = {energyMap :: EnergyMap,
+                          nextSeed :: RandomSeed}
+
+  generator :: (Fractional a, RandomGen b) => a -> b -> RandomEnergyMap
+#+END_SRC
+
+#+BEGIN_EXPORT html
+<dl>
+  <dt>White Noise</dt>
+  <dd>We literally don't know what the possible cases are and white
+  noise tends to work well when modelling randomness in nature.  High
+  coverage is set to 95th percentile and day to day fast checking is
+  set to 68th percentile.</dd>
+</dl>
+#+END_EXPORT
+
+*** Running
+The objective of the test running harness is to remember all known
+failing seeds and prevent them from becoming an issue in the future by
+always testing them.  We also want to run a test for each property for
+each test.
+
+Failing seeds are recorded on a per generator, property combination
+basis and saved as a json file in the root of the repository.
+
+We aim to automatically update this description with any new failing
+seeds when the tests are by the CI server.
+
+As before the convention for the type of a runner is a function from a
+list of properties, generators and a seed per combination to a
+structure containing the full report.
+
+Again in Haskell:
+#+BEGIN_SRC haskell
+  type TestResult = {success :: Bool,
+                     startingSeed :: RandomSeed}
+
+  runTest :: (Fractional a, RandomGen b) => (a -> b -> RandomEnergyMap) -> (RandomEnergyMap -> Bool) -> TestResult
+#+END_SRC
+
+** Unit Tests
+Our philosophy is to test all the variations of the most simple
+instances which illustrate some kind of functionality in the library.
+
+You can run the unit tests with =npm test=.
+
+** Test Coverage
+We use nyc to analyse the coverage of our tests.  Just run =npm
+test:full= from the root of the repository to run the tests and the
+coverage will be printed to the console.  This command will include
+property test based coverage in the report, whereas if you are running
+the day to day, =npm test=, command then your report will only include
+unit test coverage.
+
+You can view the details regarding coverage in a report which is
+published to a folder called =coverage= in the root of the repository.
+Open the file called =index.html= to see the report.
