@@ -43,11 +43,11 @@ project is that we don't think that:
    (more than rank 4, 4) because of the number of variations;
  - property based tests can pick up unforseen scenarios;
 
-| Properties\Generators       | White Noise |
-|-----------------------------+-------------|
-| Average Image Energy        | ✗           |
-| Total Image Energy          | ✗           |
-| Image Dimension Consistency | ✗           |
+| Properties\Generators       | White Noise | Uniform Distribution |
+|-----------------------------+-------------+----------------------|
+| Average Image Energy        | ✗           | ✗                    |
+| Total Image Energy          | ✗           | ✗                    |
+| Image Dimension Consistency | ✗           | ✗                    |
 
 For convenience, here is a cross: ✗, and here is a tick: ✓
 

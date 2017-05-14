@@ -6,7 +6,9 @@ function createDummyImage(pixelMatrix) {
     pixelMatrix: pixelMatrix,
     getPixel: function (x, y) {
       return createRGBPixel(x, y);
-    }
+    },
+
+    createImage: createDummyImage
   };
   const image = createImage(pixelMatrix);
   Object.setPrototypeOf(dummyImage, image);

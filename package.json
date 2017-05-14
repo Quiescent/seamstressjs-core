@@ -4,7 +4,7 @@
   "description": "A seam carving library in javascript.",
   "main": "index.js",
   "scripts": {
-    "test": "nyc --reporter=html --reporter=text mocha test/**/*.js && jscs src && jscs test",
+    "test": "node node_modules/madge/bin/cli.js --circular --extensions js src/ && nyc --reporter=html --reporter=text mocha test/**/*.js && jscs src && jscs test",
     "build": "webpack --config webpack.config.js",
     "next-update": "next-update -k true --tldr"
   },
@@ -26,9 +26,12 @@
   "devDependencies": {
     "chai": "3.5.0",
     "jscs": "3.0.7",
+    "madge": "1.6.0",
     "mocha": "3.2.0",
+    "mocha-testcheck": "1.0.0-rc.0",
+    "next-update": "1.5.1",
     "nyc": "10.2.0",
-    "next-update": "1.5.1", 
+    "testcheck": "1.0.0-rc.2",
     "webpack": "2.5.1"
   },
   "dependencies": {

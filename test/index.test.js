@@ -1,17 +1,20 @@
 const assert = require('chai').assert;
-const seamCarve = require('../index.js');
+const seamstress = require('../index.js');
 
-describe('seamCarve', function () {
+// TODO: We should probably change this...  "It's wierd" M. van der
+// Velden 14 May 2017
+// DONE!  It's no longer wierd! :D  21 May 2017
+describe('resize', function () {
   const image = {};
-  it('should return the given image when supplied with empty target', function () {
-    assert.equal(seamCarve(image, {}), image);
+  it('should throw an error when supplied with empty target', function () {
+    assert.throws(function () { seamstress.resize(image, {}); });
   });
 
-  it('should return the given image when supplied with no target', function () {
-    assert.equal(seamCarve(image, undefined), image);
+  it('should throw an error when supplied with no target', function () {
+    assert.throws(function () { seamstress.resize(image, undefined); });
   });
 
-  it('should return the given image when supplied with a null target', function () {
-    assert.equal(seamCarve(image, null), image);
+  it('should throw an error when supplied with a null target', function () {
+    assert.throws(function () { seamstress.resize(image, null); });
   });
 });
