@@ -29,11 +29,9 @@
     "jscs": "3.0.7",
     "madge": "1.6.0",
     "mocha": "3.2.0",
-    "mocha-testcheck": "1.0.0-rc.0",
     "next-update": "1.5.1",
     "nyc": "10.2.0",
     "release-it": "2.7.3",
-    "testcheck": "1.0.0-rc.2",
     "webpack": "2.5.1"
   },
   "dependencies": {
