@@ -36,87 +36,6 @@ image while retaining the most important content.
 * Tests
 This repository contains a very comprehensive suite of tests.
 
-** Property Based Tests
-The reason that we have a focus on property based testing in this
-project is that we don't think that:
- - it's not feasible to maintain unit tests for very large images
-   (more than rank 4, 4) because of the number of variations;
- - property based tests can pick up unforseen scenarios;
-
-| Properties\Generators       | White Noise | Uniform Distribution |
-|-----------------------------+-------------+----------------------|
-| Average Image Energy        | ✗           | ✗                    |
-| Total Image Energy          | ✗           | ✗                    |
-| Image Dimension Consistency | ✗           | ✗                    |
-
-For convenience, here is a cross: ✗, and here is a tick: ✓
-
-*** Properties
-**** /Average Image Energy/
-When removing a low energy seam, the average energy of the image
-should increase.  Conversely, when growing the image from a low energy
-seam, the average energy of the image should decrease.
-
-**** /Total Image Energy/
-When removing a seam from the image the total energy should decrease
-and when adding a seam the total energy should increase.
-
-**** /Image Dimension Consistency/
-The number of pixels in each row should be the same as in every
-other row and the same applies to the columns in the image.
-
-*** Generators
-For each generator we define a percentile for high coverage and day to
-day fast checking.  This varies between generators due to the varying
-complexity of each generator.
-
-The convention for the type of a generator is a function from a seed
-type and a fractional number (the percentile coverage) to a structure
-of a next seed and an EnergyMap.
-
-We believe that Haskell is an excellent way of describing the types
-involved:
-#+BEGIN_SRC haskell
-  type EnergyMap = [[Float]]
-
-  type RandomSeed = Integer
-
-  type RandomEnergyMap = {energyMap :: EnergyMap,
-                          nextSeed :: RandomSeed}
-
-  generator :: (Fractional a, RandomGen b) => a -> b -> RandomEnergyMap
-#+END_SRC
-
-**** /White Noise/
-We literally don't know what the possible cases are and white noise
-tends to work well when modelling randomness in nature.  High coverage
-is set to 95th percentile and day to day fast checking is set to 68th
-percentile.
-
-*** Running
-The objective of the test running harness is to remember all known
-failing seeds and prevent them from becoming an issue in the future by
-always testing them.  We also want to run a test for each property for
-each test.
-
-Failing seeds are recorded on a per generator, property combination
-basis and saved as a json file in the root of the repository.
-
-We aim to automatically update this description with any new failing
-seeds when the tests are by the CI server.
-
-As before the convention for the type of a runner is a function from a
-list of properties, generators and a seed per combination to a
-structure containing the full report.
-
-Again in Haskell:
-#+BEGIN_SRC haskell
-  type TestResult = {success :: Bool,
-                     startingSeed :: RandomSeed}
-
-  runTest :: (Fractional a, RandomGen b) => (a -> b -> RandomEnergyMap) -> (RandomEnergyMap -> Bool) -> TestResult
-#+END_SRC
-
 ** Unit Tests
 Our philosophy is to test all the variations of the most simple
 instances which illustrate some kind of functionality in the library.
@@ -134,3 +53,18 @@ unit test coverage.
 You can view the details regarding coverage in a report which is
 published to a folder called =coverage= in the root of the repository.
 Open the file called =index.html= to see the report.
+
+* TODOs
+** TODO [#A] Accept Data URI Image
+Core should be able to accept a Data URI and convert it into an
+indexible image prior to resizing it.
+
+** TODO [#C] Rename Dummy Image
+DummyImage is no longer a second class citizen.  It's become aparent
+that it should actually be a core data type hence it should be called
+"IndexibleImage".
+
+** TODO [#A] Migrate Property Tests To Dev-Integrations
+The property tests have to be in dev integrations because we want to
+be able to depict the output of the tests when they go wrong instead
+of spitting out pretty printed JSON.

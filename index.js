@@ -1,8 +1,10 @@
 const R = require('ramda');
 
 /**
- * target: {width: int,
- *          height: int}
+ * target: {
+ *   width: int,
+ *   height: int
+ * }
  */
 function resize(image, target) {
   assertValidTarget(target);
