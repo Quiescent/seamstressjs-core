@@ -3,10 +3,9 @@ const directionObject = require('./directions');
 const carveSeam = require('./carveSeam');
 const expandSeam = require('./expandSeam');
 
-function createImage(image) {
+function createImage(pixelMatrix) {
   return {
-    // TODO: This name is rubbish.  image should be called pixelMatrix.
-    image: image,
+    pixelMatrix: pixelMatrix,
     energyMap: function () {
       return energyMap(this);
     },
@@ -20,12 +19,12 @@ function createImage(image) {
     },
 
     width: function () {
-      return image.length;
+      return pixelMatrix.length;
     },
 
     height: function () {
-      if (!image[0]) return 0;
-      return image[0].length;
+      if (!pixelMatrix[0]) return 0;
+      return pixelMatrix[0].length;
     }
   };
 };
@@ -49,7 +48,7 @@ function energyMap(self) {
 }
 
 function toImage(self, target) {
-  return self.image;
+  return self.pixelMatrix;
 }
 
 function resize(self, target) {
