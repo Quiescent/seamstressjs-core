@@ -26,6 +26,7 @@
   "homepage": "https://github.com/Quiescent/seamstressjs-core#readme",
   "devDependencies": {
     "chai": "3.5.0",
+    "jimp": "0.2.28",
     "jscs": "3.0.7",
     "madge": "1.6.0",
     "mocha": "3.2.0",

@@ -64,7 +64,13 @@ DummyImage is no longer a second class citizen.  It's become aparent
 that it should actually be a core data type hence it should be called
 "IndexibleImage".
 
-** TODO [#A] Migrate Property Tests To Dev-Integrations
+** DONE [#A] Migrate Property Tests To Dev-Integrations
+   CLOSED: [2017-06-04 Sun 12:11]
+   :LOGBOOK:
+   - CLOSING NOTE [2017-06-04 Sun 12:11] \\
+     Migrated the tests and they're passing; however, they shouldn't be
+     passing.  Adding a TODO to that effect in dev integrations.
+   :END:
 The property tests have to be in dev integrations because we want to
 be able to depict the output of the tests when they go wrong instead
 of spitting out pretty printed JSON.
